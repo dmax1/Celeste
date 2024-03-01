@@ -1,0 +1,24 @@
+{
+  "name": "celeste",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmax1/Celeste.git"
+  },
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/dmax1/Celeste/issues"
+  },
+  "homepage": "https://github.com/dmax1/Celeste#readme",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "pixi.js": "^7.4.0"
+  }
+}

@@ -1,20 +1,19 @@
 let app = new PIXI.Application({
-  width: window.innerWidth,
-  height: window.innerHeight,
-  backgroundColor: 0x000000 // Consider setting this to match your background
-})
-document.body.appendChild(app.view)
+  // width: window.innerWidth, // width of the canvas
+  height: window.innerHeight, // height of the canvas
+  backgroundColor: 0x1099bb // background color
+});
 
-PIXI.Loader.shared.add("constellation", "path/to/your/constellation/background.webp").add("birthdayMessage", "path/to/your/birthday/message/heaven.webp").load(setup)
+document.body.appendChild(app.view);
+
+// Load an image and add it to the stage
+let sprite = PIXI.Sprite.from('assets/background.webp');
 
 
-function setup () {
-  let background = new PIXI.Sprite(PIXI.Loader.shared.resources["constellation"].texture)
-  app.stage.addChild(background)
+app.stage.addChild(sprite);
 
-  let message = new PIXI.Sprite(PIXI.Loader.shared.resources["birthdayMessage"].texture)
-  message.alpha = 0 // Initially invisible
-  app.stage.addChild(message)
-
-  // Initialize draggable stars here
-}
+// // Optional: if you want the image to cover the area without distorting its aspect ratio, you can do:
+// let ratio = Math.max(window.innerWidth / sprite.texture.width, window.innerHeight / sprite.texture.height);
+// sprite.scale.x = sprite.scale.y = ratio;
+// sprite.anchor.set(0.5);
+// sprite.position.set(window.innerWidth / 2, window.innerHeight / 2);
