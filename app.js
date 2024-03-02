@@ -7,7 +7,7 @@ let app = new PIXI.Application({
 document.body.appendChild(app.view)
 
 let clickCounter = 0
-const totalStars = 6
+const totalStars = 3
 let heavenSprite
 let ratio
 
