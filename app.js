@@ -42,14 +42,15 @@ PIXI.Loader.shared.add('background', 'assets/background.webp').add('heaven', 'as
     text.visible = false // Make the text disappear on click
   })
 
-  // Example usage
-  createClickablePoint(240, 300)
-  createClickablePoint(170, 400)
-  createClickablePoint(230, 500)
 
-  createClickablePoint(370, 400)
-  createClickablePoint(430, 500)
-  createClickablePoint(400, 600)
+  createClickablePoint(window.innerWidth * 0.35, window.innerHeight * 0.35);
+  createClickablePoint(window.innerWidth * 0.30, window.innerHeight * 0.45);
+  createClickablePoint(window.innerWidth * 0.35, window.innerHeight * 0.55);
+
+  createClickablePoint(window.innerWidth * 0.60, window.innerHeight * 0.45);
+  createClickablePoint(window.innerWidth * 0.7, window.innerHeight * 0.55);
+  createClickablePoint(window.innerWidth * 0.6, window.innerHeight * 0.65);
+
 })
 
 let fadeInDuration = 3000 // milliseconds
