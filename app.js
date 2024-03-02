@@ -7,7 +7,7 @@ let app = new PIXI.Application({
 document.body.appendChild(app.view)
 
 let clickCounter = 0
-const totalStars = 3
+const totalStars = 6
 let heavenSprite
 let ratio
 
@@ -90,7 +90,7 @@ function transitionToHeaven () {
   heavenSprite.alpha = 0
   app.stage.addChild(heavenSprite) // Make sure this is uncommented
 
-  let birthdayText = new PIXI.Text("¡Feliz cumpleaños,\n Celeste!", {
+  let birthdayText = new PIXI.Text("¡Feliz\ncumpleaños,\nCeleste!", {
     fontFamily: 'Arial',
     fontSize: 60, // Consider increasing font size for visibility
     fill: 0xffffff,
