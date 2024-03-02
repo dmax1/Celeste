@@ -1,72 +1,114 @@
 let app = new PIXI.Application({
   width: window.innerWidth, // width of the canvas
   height: window.innerHeight, // height of the canvas
-  backgroundColor: 0x1099bb // background color
-});
+  backgroundColor: 0x100006 // background color
+})
 
-document.body.appendChild(app.view);
+document.body.appendChild(app.view)
 
-// // Load an image and add it to the stage
-// let sprite = PIXI.Sprite.from('assets/background.webp');
-//
-// // Optional: if you want the image to cover the area without distorting its aspect ratio, you can do:
-// let ratio = Math.max(window.innerWidth / sprite.texture.width, window.innerHeight / sprite.texture.height);
-// sprite.scale.x = sprite.scale.y = ratio;
-// sprite.anchor.set(0.5);
-// sprite.position.set(window.innerWidth / 2, window.innerHeight / 2);
-// app.stage.addChild(sprite);
-//
-//
-// let heavenSprite = PIXI.Sprite.from('assets/heaven.webp');
-// let heavenSpriteRatio = Math.max(window.innerWidth / heavenSprite.texture.width, window.innerHeight / heavenSprite.texture.height);
-// heavenSprite.scale.x = heavenSprite.scale.y = heavenSpriteRatio;
-// heavenSprite.anchor.set(0.5);
-// heavenSprite.position.set(window.innerWidth / 2, window.innerHeight / 2);
-// heavenSprite.alpha = 0; // Start fully transparent
-// app.stage.addChild(heavenSprite);
-//
-// // Fade in over 3 seconds
-// let fadeInDuration = 3000; // milliseconds
-// let startTime = Date.now();
-//
-// function update() {
-//   let elapsedTime = Date.now() - startTime;
-//   let alpha = elapsedTime / fadeInDuration;
-//   heavenSprite.alpha = Math.min(alpha, 1); // Ensure alpha does not exceed 1
-//
-//   if (heavenSprite.alpha < 1) {
-//     requestAnimationFrame(update); // Continue updating until fully visible
-//   }
-// }
-//
-// requestAnimationFrame(update); // Start the fade-in process
+let clickCounter = 0
+const totalStars = 6
+let heavenSprite
+let ratio
+
+PIXI.Loader.shared.add('background', 'assets/background.webp').add('heaven', 'assets/heaven.webp').load((loader, resources) => {
+  let sprite = new PIXI.Sprite(resources.background.texture)
+  ratio = Math.max(window.innerWidth / sprite.texture.width, window.innerHeight / sprite.texture.height)
+  sprite.scale.x = sprite.scale.y = ratio
+  sprite.anchor.set(0.5)
+  sprite.position.set(window.innerWidth / 2, window.innerHeight / 2)
+  app.stage.addChild(sprite)
+
+  heavenSprite = new PIXI.Sprite(resources.heaven.texture)
+  // heavenSprite.scale.x = heavenSprite.scale.y = ratio
+  // heavenSprite.anchor.set(0.5)
+  // heavenSprite.position.set(window.innerWidth / 2, window.innerHeight / 2)
+  // heavenSprite.alpha = 0
+  // // app.stage.addChild(heavenSprite);
+  //
+  // // Fade in heavenSprite over 3 seconds
+  // app.ticker.add((delta) => {
+  //   if (heavenSprite.alpha < 1) {
+  //     heavenSprite.alpha += delta / (fadeInDuration / PIXI.Ticker.shared.deltaMS)
+  //   }
+  // })
 
 
-PIXI.Loader.shared
-.add('background', 'assets/background.webp')
-.add('heaven', 'assets/heaven.webp')
-.load((loader, resources) => {
-  let sprite = new PIXI.Sprite(resources.background.texture);
-  let ratio = Math.max(window.innerWidth / sprite.texture.width, window.innerHeight / sprite.texture.height);
-  sprite.scale.x = sprite.scale.y = ratio;
-  sprite.anchor.set(0.5);
-  sprite.position.set(window.innerWidth / 2, window.innerHeight / 2);
-  app.stage.addChild(sprite);
+  let text = new PIXI.Text('Click on RED stars', { fontFamily: 'Arial', fontSize: 24, fill: 0xff1010, align: 'center' })
+  text.anchor.set(0.5)
+  text.position.set(300, 100) // Adjust positioning as needed
+  app.stage.addChild(text)
+  text.on('pointerdown', () => {
+    text.visible = false // Make the text disappear on click
+  })
 
-  let heavenSprite = new PIXI.Sprite(resources.heaven.texture);
-  heavenSprite.scale.x = heavenSprite.scale.y = ratio;
-  heavenSprite.anchor.set(0.5);
-  heavenSprite.position.set(window.innerWidth / 2, window.innerHeight / 2);
-  heavenSprite.alpha = 0;
-  app.stage.addChild(heavenSprite);
+  // Example usage
+  createClickablePoint(240, 300)
+  createClickablePoint(170, 400)
+  createClickablePoint(230, 500)
 
-  // Fade in heavenSprite over 3 seconds
-  app.ticker.add((delta) => {
-    if (heavenSprite.alpha < 1) {
-      heavenSprite.alpha += delta / (fadeInDuration / PIXI.Ticker.shared.deltaMS);
-    }
-  });
-});
+  createClickablePoint(370, 400)
+  createClickablePoint(430, 500)
+  createClickablePoint(400, 600)
+})
 
-let fadeInDuration = 3000; // milliseconds
+let fadeInDuration = 3000 // milliseconds
+
+
+function createClickablePoint (x, y) {
+  let point = PIXI.Sprite.from('assets/s3.png')
+  point.interactive = true // Make the sprite interactive
+  point.buttonMode = true // Changes the cursor on hover
+  point.anchor.set(0.5)
+  point.scale.set(0.35) // Initial scale
+  point.position.set(x, y)
+  point.tint = 0xff2100
+
+  point.on('pointerdown', () => {
+    // Start animation
+    point.alpha = 1 // Start fully transparent
+    point.scale.set(1) // Overscale
+
+    // Animate scale back to normal and fade in
+    gsap.to(point, { scale: 1.5, duration: 0.5, ease: "back.out" }).then(() => {
+      gsap.to(point, { alpha: 0, duration: 0.5 })
+      clickCounter++
+      if (clickCounter === totalStars) {
+        transitionToHeaven() // Define this function to handle the transition
+      }
+    })
+  })
+
+  app.stage.addChild(point)
+}
+
+function transitionToHeaven () {
+  heavenSprite.scale.x = heavenSprite.scale.y = ratio
+  heavenSprite.anchor.set(0.5)
+  heavenSprite.position.set(window.innerWidth / 2, window.innerHeight / 2)
+  heavenSprite.alpha = 0
+  app.stage.addChild(heavenSprite) // Make sure this is uncommented
+
+  let birthdayText = new PIXI.Text("¡Feliz cumpleaños,\n Celeste!", {
+    fontFamily: 'Arial',
+    fontSize: 60, // Consider increasing font size for visibility
+    fill: 0xffffff,
+    align: 'center'
+  })
+  birthdayText.anchor.set(0.5)
+  birthdayText.position.set(app.screen.width / 2, app.screen.height / 2)
+  birthdayText.alpha = 1 // Start fully transparent
+  app.stage.addChild(birthdayText)
+
+  // Start fade-in
+  gsap.to(heavenSprite, {
+    alpha: 1, duration: 3
+
+  })
+
+  // 3 seconds fade-in
+
+}
+
+
 
